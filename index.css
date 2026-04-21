@@ -1,0 +1,75 @@
+import { motion } from "motion/react";
+import { Github, Linkedin, Mail, Menu, X } from "lucide-react";
+import { useState } from "react";
+import { cn } from "../lib/utils";
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const navItems = [
+    { name: "About", href: "#about" },
+    { name: "Projects", href: "#projects" },
+    { name: "Capabilities", href: "#capabilities" },
+    { name: "Contact", href: "#contact" },
+  ];
+
+  return (
+    <nav className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-black/5">
+      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="text-2xl font-bold tracking-tighter text-text-dark"
+        >
+          CHOI<span className="text-brand-primary">HAKYUNG</span>
+        </motion.div>
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {navItems.map((item, idx) => (
+            <motion.a
+              key={item.name}
+              href={item.href}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              className="text-sm font-bold text-text-muted hover:text-brand-primary transition-colors"
+            >
+              {item.name}
+            </motion.a>
+          ))}
+          <div className="h-4 w-[1px] bg-black/10 mx-2" />
+          <div className="flex items-center gap-4">
+            <a href="#" className="text-black/40 hover:text-brand-primary transition-colors"><Github size={18} /></a>
+            <a href="#" className="text-black/40 hover:text-brand-primary transition-colors"><Linkedin size={18} /></a>
+          </div>
+        </div>
+
+        {/* Mobile Toggle */}
+        <button className="md:hidden text-text-dark" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <X /> : <Menu />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="md:hidden bg-white border-b border-black/5 px-6 py-8 flex flex-col gap-6 shadow-xl"
+        >
+          {navItems.map((item) => (
+            <a 
+              key={item.name} 
+              href={item.href} 
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-bold text-text-dark"
+            >
+              {item.name}
+            </a>
+          ))}
+        </motion.div>
+      )}
+    </nav>
+  );
+}
